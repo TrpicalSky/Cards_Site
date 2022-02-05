@@ -47,7 +47,7 @@ function shuffle(deck)
 }
 
 function dealCard(deck){
-    const card = shuffled_deck.pop();
+    const card = deck.pop();
     cardsDealt.push(card);
     console.log(cardsDealt)
     renderDealtCards(cardsDealt);
@@ -68,8 +68,8 @@ function showCard() {
 
 
 function dealPlayerCard() {
-    const dealtCard = dealCard(shuffled_deck,cardsDealt)
-    renderCard(dealtCard)
+    const dealtCard = dealCard(shuffled_deck)
+    // renderDealtCards(dealtCard) // renderCard(dealtCard)
     document.getElementById("dealtcard").innerHTML = `Your card number was:${dealtCard.Value} and the suit was:${dealtCard.Suit}`;
 }
 
