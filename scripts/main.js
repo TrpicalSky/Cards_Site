@@ -1,8 +1,10 @@
 const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
 const values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+let cardsDealt = new Array();
 const deck = getDeck()
 const shuffled_deck = shuffle(deck)
-const card = dealCard(shuffled_deck)
+// const card = dealCard(shuffled_deck)
+
 
 
 
@@ -45,7 +47,11 @@ function shuffle(deck)
 }
 
 function dealCard(deck){
-    return shuffled_deck.pop();
+    const card = shuffled_deck.pop();
+    cardsDealt.push(card);
+    console.log(cardsDealt)
+    renderDealtCards(cardsDealt);
+    return card;
 }
 
 function grabCard(deck) {
@@ -58,6 +64,13 @@ function showCard() {
     renderCard(card);
     console.log("I was executed!");
     document.getElementById("card").innerHTML = `Your card number was:${card.Value} and the suit was:${card.Suit}`;
+}
+
+
+function dealPlayerCard() {
+    const dealtCard = dealCard(shuffled_deck,cardsDealt)
+    renderCard(dealtCard)
+    document.getElementById("dealtcard").innerHTML = `Your card number was:${dealtCard.Value} and the suit was:${dealtCard.Suit}`;
 }
 
 
@@ -78,6 +91,30 @@ function renderCard(card) {
 
     document.getElementById("deck").appendChild(card1);
 }
+
+function renderDealtCards(array) {
+    document.getElementById("deck").innerHTML = "";
+
+    for (i=0; i < array.length; i++)
+    {
+        let card = document.createElement("div");
+        let value = document.createElement("div");
+        let suit = document.createElement("div");
+
+        card.className = "card";
+        value.className = "value";
+        suit.className = "suit " + array[i].Suit;
+
+        value.innerHTML = array[i].Value;
+        card.appendChild(value);
+        card.appendChild(suit);
+
+        document.getElementById("deck").appendChild(card);
+    }
+}
+
+
+
 
 // console.log(deck)
 // console.log(shuffled_deck)
