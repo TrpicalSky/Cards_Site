@@ -9,12 +9,24 @@ const deck = getDeck()
 const shuffled_deck = shuffle(deck)
 // const card = dealCard(shuffled_deck)
 
+// REMINDER FIX ACES BREAKING VALUE AFTER ONE BEING ADDED AND THEN ANOTHER CARD BEING ADDED BREAKS VALUE (Half Fixed)
 
+
+function afterStand() {
+    while(dealerHand < 17) {
+        const card = deck.pop();
+        dealerCards.push(card);
+        renderDealerCards(dealerCards)
+        const dealerValue = dealerDeckValue(dealerCards)
+        console.log(dealerCards);
+    }
+}
 
 function stand() {
     if (cardsDealt.length >= 2){
         const button = document.getElementById("newcard")
         button.disabled = true;
+        afterStand()
     }else {
         return;
     }
@@ -153,7 +165,7 @@ function renderDealerCards(array) {
 
 function addDealerCards(deck)
 {
-    if (dealerCards.length < 2 || decision === true) {
+    if (dealerCards.length < 2 ) {
         const card = deck.pop();
         dealerCards.push(card);
         renderDealerCards(dealerCards)
@@ -167,6 +179,7 @@ function addDealerCards(deck)
 
 function playerDeckValue(deck)
 {
+    let removed = false;
     let aces = 0;
     let value = 0;
     for (let i = 0; i < cardsDealt.length; i++ ) {
@@ -185,39 +198,53 @@ function playerDeckValue(deck)
         value += number;
         console.log(value)
         console.log(`The number the of aces ${aces}`)
-        if (value > 21 && aces === 1) {
-            value -= 10;
-        } else if (value > 21 && aces === 2) {
-            value -= 20;
-        }else if (value > 21 && aces === 3) {
-            value -= 30;
-        }else if (value > 21 && aces === 4) {
-            value -= 40;
-        }
+        // if (value > 21 && aces === 1) {
+        //     value -= 10;
+        // } else if (value > 21 && aces === 2) {
+        //     value -= 20;
+        // }else if (value > 21 && aces === 3) {
+        //     value -= 30;
+        // }else if (value > 21 && aces === 4) {
+        //     value -= 40;
+        // }
+        playerHand = value;
+        document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
         if (value === 21){
             stand()
             document.getElementById("card").innerHTML = "BLACKJACK!!!!!"
+            return;
         }
 
         console.log(`I am the value ${value}`);
         
         
 
-        playerHand = value;
-        document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
+        // playerHand = value;
+        // document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
         console.log(`I am the players hand Value: ${playerHand}`);
-        if(value > 21) {
-            document.getElementById("card").innerHTML = "BUSTED!!!!!"
-            stand()
-        }
+        console.log(`The Value for the Player is ${value}`)
+        
+    }
+    if(value > 21){
+        if(aces > 0 && removed === false) {
+            console.log("Removed More 10")
+            removed = true;
+            value -= 10
+            playerHand -=10
+            document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
+        } else if(value > 21) {
+        document.getElementById("card").innerHTML = "BUSTED!!!!!"
+        stand()
     }
     
     
     // cardsDealt[i].Value // cardsDealt[i].Suit
     // return added Cards
 }
+}
 function dealerDeckValue(deck)
 {
+    let removed = false;
     let aces = 0;
     let value = 0;
     for (let i = 0; i < dealerCards.length; i++ ) {
@@ -233,23 +260,52 @@ function dealerDeckValue(deck)
             number = parseInt(number)
         }
         value += number;
-        if (value > 21 && aces === 1) {
-            value -= 10;
-        } else if (value > 21 && aces === 2) {
-            value -= 20;
-        }else if (value > 21 && aces === 3) {
-            value -= 30;
-        }else if (value > 21 && aces === 4) {
-            value -= 40;
-        }
+        // if (value > 21 && aces === 1) {
+        //     value -= 10;
+        // } else if (value > 21 && aces === 2) {
+        //     value -= 20;
+        // }else if (value > 21 && aces === 3) {
+        //     value -= 30;
+        // }else if (value > 21 && aces === 4) {
+        //     value -= 40;
+        // }
         console.log(`I am the value ${value}`);
         dealerHand = value;
         document.getElementById("dealervalue").innerHTML = `Dealers Cards: ${dealerHand}`;
         console.log(`I am the dealers hand Value: ${dealerHand}`);
+        if (value === 21){
+            stand()
+            document.getElementById("card").innerHTML = "You lost the dealer hit a blackjack"
+            return;
+        }
         
+        
+    }
+    // if(aces > 0 && removed === false) {
+    //     console.log("Removed More 10")
+    //     removed = true;
+    //     value -= 10
+    //     playerHand -=10
+    //     document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
+    // }
+    // if(value > 21) {
+    //     document.getElementById("card").innerHTML = "Dealer Busted You WINNNNN!!!"
+    //     stand()
+    // }
+    if(value > 21){
+        if(aces > 0 && removed === false) {
+            console.log("Removed More 10")
+            removed = true;
+            value -= 10
+            dealerHand -=10
+            document.getElementById("playervalue").innerHTML = `Your Cards: ${dealerHand}`;
+        } else if(value > 21) {
+        document.getElementById("card").innerHTML = "Dealer Busted You WINNNNN!!!"
+        stand()
     }
 
 
 // console.log(deck)
 // console.log(shuffled_deck)
+}
 }
