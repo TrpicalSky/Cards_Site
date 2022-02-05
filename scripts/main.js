@@ -1,4 +1,4 @@
-const suits = ["spades", "diamonds", "clubs", "hearts"];
+const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
 const values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 const deck = getDeck()
 const shuffled_deck = shuffle(deck)
@@ -40,6 +40,7 @@ function shuffle(deck)
         shuffled_deck[location2] = tmp;
     }
 
+
     return shuffled_deck
 }
 
@@ -54,11 +55,29 @@ function grabCard(deck) {
 
 function showCard() {
     const card = grabCard(shuffled_deck)
+    renderCard(card);
     console.log("I was executed!");
     document.getElementById("card").innerHTML = `Your card number was:${card.Value} and the suit was:${card.Suit}`;
 }
 
-console.log(card);
+
+function renderCard(card) {
+    document.getElementById("deck").innerHTML = "";
+
+    let card1 = document.createElement("div");
+    let value1 = document.createElement("div");
+    let suit1 = document.createElement("div");
+
+    card1.className = "card";
+    value1.className = "value";
+    suit1.className = "suit " + card.Suit;
+
+    value1.innerHTML = card.Value;
+    card1.appendChild(value1);
+    card1.appendChild(suit1);
+
+    document.getElementById("deck").appendChild(card1);
+}
 
 // console.log(deck)
 // console.log(shuffled_deck)
