@@ -1,18 +1,32 @@
 const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
 const values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 let cardsDealt = new Array();
+let dealerCards = new Array();
+let decision = false;
+let playerHand = 0;
+let dealerHand = 0;
 const deck = getDeck()
 const shuffled_deck = shuffle(deck)
 // const card = dealCard(shuffled_deck)
 
 
 
+function stand() {
+    if (cardsDealt.length >= 2){
+        const button = document.getElementById("newcard")
+        button.disabled = true;
+    }else {
+        return;
+    }
+    
+}
+
 
 function getDeck()
 {
     let deck = new Array();
 
-    for (let i =0; i< suits.length; i++)
+    for (let i = 0; i< suits.length; i++)
     {
         for (let x = 0; x < values.length; x++)
         {
@@ -69,6 +83,9 @@ function showCard() {
 
 function dealPlayerCard() {
     const dealtCard = dealCard(shuffled_deck)
+    const dealerCard = addDealerCards(shuffled_deck)
+    const value = playerDeckValue(cardsDealt)
+    const dealerValue = dealerDeckValue(dealerCards)
     // renderDealtCards(dealtCard) // renderCard(dealtCard)
     document.getElementById("dealtcard").innerHTML = `Your card number was:${dealtCard.Value} and the suit was:${dealtCard.Suit}`;
 }
@@ -113,8 +130,126 @@ function renderDealtCards(array) {
     }
 }
 
+function renderDealerCards(array) {
+    document.getElementById("dealer").innerHTML = "";
 
+    for (i=0; i < array.length; i++)
+    {
+        let card = document.createElement("div");
+        let value = document.createElement("div");
+        let suit = document.createElement("div");
+
+        card.className = "card";
+        value.className = "value";
+        suit.className = "suit " + array[i].Suit;
+
+        value.innerHTML = array[i].Value;
+        card.appendChild(value);
+        card.appendChild(suit);
+
+        document.getElementById("dealer").appendChild(card);
+    }
+}
+
+function addDealerCards(deck)
+{
+    if (dealerCards.length < 2 || decision === true) {
+        const card = deck.pop();
+        dealerCards.push(card);
+        renderDealerCards(dealerCards)
+        console.log(dealerCards);
+        return card;
+    } else if(dealerCards.length >= 2) {
+        return;
+    }
+    
+}
+
+function playerDeckValue(deck)
+{
+    let aces = 0;
+    let value = 0;
+    for (let i = 0; i < cardsDealt.length; i++ ) {
+        console.log(`The number the of aces ${aces}`)
+        let number = cardsDealt[i].Value;
+        console.log(`I am the number being added ${number}`)
+        if (number === "K" || number === "Q" || number === "J" ) {
+            number = 10;
+        } else if (number === "A") {
+            number = 11;
+            aces += 1
+        }else {
+            number = parseInt(number)
+        }
+        
+        value += number;
+        console.log(value)
+        console.log(`The number the of aces ${aces}`)
+        if (value > 21 && aces === 1) {
+            value -= 10;
+        } else if (value > 21 && aces === 2) {
+            value -= 20;
+        }else if (value > 21 && aces === 3) {
+            value -= 30;
+        }else if (value > 21 && aces === 4) {
+            value -= 40;
+        }
+        if (value === 21){
+            stand()
+            document.getElementById("card").innerHTML = "BLACKJACK!!!!!"
+        }
+
+        console.log(`I am the value ${value}`);
+        
+        
+
+        playerHand = value;
+        document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
+        console.log(`I am the players hand Value: ${playerHand}`);
+        if(value > 21) {
+            document.getElementById("card").innerHTML = "BUSTED!!!!!"
+            stand()
+        }
+    }
+    
+    
+    // cardsDealt[i].Value // cardsDealt[i].Suit
+    // return added Cards
+}
+function dealerDeckValue(deck)
+{
+    let aces = 0;
+    let value = 0;
+    for (let i = 0; i < dealerCards.length; i++ ) {
+        
+        let number = dealerCards[i].Value;
+        console.log(`I am the number being added ${number}`)
+        if (number === "K" || number === "Q" || number === "J" ) {
+            number = 10;
+        } else if (number === "A") {
+            number = 11;
+            aces += 1
+        }else {
+            number = parseInt(number)
+        }
+        value += number;
+        if (value > 21 && aces === 1) {
+            value -= 10;
+        } else if (value > 21 && aces === 2) {
+            value -= 20;
+        }else if (value > 21 && aces === 3) {
+            value -= 30;
+        }else if (value > 21 && aces === 4) {
+            value -= 40;
+        }
+        console.log(`I am the value ${value}`);
+        dealerHand = value;
+        document.getElementById("dealervalue").innerHTML = `Dealers Cards: ${dealerHand}`;
+        console.log(`I am the dealers hand Value: ${dealerHand}`);
+        
+    }
 
 
 // console.log(deck)
 // console.log(shuffled_deck)
+}

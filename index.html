@@ -7,16 +7,24 @@
 </head>
 <body>
   <script type="text/javascript" src="scripts/main.js"></script>
-  <button onClick=showCard()>Click Me For A Random Card</button>
-  <button onClick=dealPlayerCard()>Click Me To Deal A Card</button>
+  <!-- <button onClick=showCard()>Click Me For A Random Card</button> -->
+  <button id="newcard" onClick=dealPlayerCard()>Click Me To Deal A Card</button>
+  <button id="stand" onClick=stand()>Stand!</button>
   <p id=card>This is where your card will be shown</p> 
   <p id=dealtcard>This is where your card will show after it has been dealt</p>
 
   <div class="deck">
 
-    <h1>Your Card</h1>
+    <h1 id=playervalue>Your Cards</h1>
 
     <div id="deck"></div>
+
+  </div>
+
+  <div class="dealer">
+    <h1 id="dealervalue">Dealers Cards</h1>
+
+  <div id="dealer"></div>
 
   </div>
 </body>

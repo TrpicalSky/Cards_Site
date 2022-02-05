@@ -1,3 +1,19 @@
+.dealer 
+{
+    position: absolute;
+    top: 350px;
+}
+.dealer .card
+{
+    border: solid 1px #aaa;
+    border-radius: 9px;
+    width: 95px;
+    height: 150px;
+    float:left;
+    background-color: white;
+    padding: 3px 3px 3px 3px;
+    margin: 5px;
+}
 .deck .card
 {
     border: solid 1px #aaa;
