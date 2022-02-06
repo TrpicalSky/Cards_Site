@@ -5,6 +5,7 @@ let dealerCards = new Array();
 let decision = false;
 let playerHand = 0;
 let dealerHand = 0;
+let busted = false;
 const deck = getDeck()
 const shuffled_deck = shuffle(deck)
 // const card = dealCard(shuffled_deck)
@@ -14,21 +15,39 @@ const shuffled_deck = shuffle(deck)
 
 function afterStand() {
     while(dealerHand < 17) {
+        const dealerValue = dealerDeckValue(dealerCards)
         const card = deck.pop();
         dealerCards.push(card);
         renderDealerCards(dealerCards)
-        const dealerValue = dealerDeckValue(dealerCards)
         console.log(dealerCards);
+    }
+    if (dealerHand > playerHand && busted !== true) {
+        document.getElementById("card").innerHTML = "Dealer has a Bigger hand. You LOSE!!!!!"
+    } else if (dealerHand < playerHand) {
+        document.getElementById("card").innerHTML = "Dealer has a smaller hand. You WINNNNN!!!"
+    } else if (dealerHand === playerHand) {
+        document.getElementById("card").innerHTML = "YOU TIE!!!!"
     }
 }
 
 function stand() {
+    if (decision) {
+        afterStand();
+    }
+    
+}
+
+function Buttonstand() {
     if (cardsDealt.length >= 2){
         const button = document.getElementById("newcard")
         button.disabled = true;
-        afterStand()
-    }else {
-        return;
+        decision = true;
+        afterStand();
+    //     if (decision) {
+    //         afterStand()
+    //     }
+    // }else {
+    //     return;
     }
     
 }
@@ -210,7 +229,7 @@ function playerDeckValue(deck)
         playerHand = value;
         document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
         if (value === 21){
-            stand()
+            Buttonstand()
             document.getElementById("card").innerHTML = "BLACKJACK!!!!!"
             return;
         }
@@ -279,7 +298,19 @@ function dealerDeckValue(deck)
             return;
         }
         
-        
+        if(value > 21){
+            if(aces > 0 && removed === false) {
+                console.log("Removed More 10")
+                removed = true;
+                value -= 10
+                dealerHand -=10
+                document.getElementById("playervalue").innerHTML = `Your Cards: ${dealerHand}`;
+            } else if(value > 21) {
+            document.getElementById("card").innerHTML = "Dealer Busted You WINNNNN!!!"
+            busted = true;
+            // stand()
+        }
+    
     }
     // if(aces > 0 && removed === false) {
     //     console.log("Removed More 10")
@@ -292,18 +323,7 @@ function dealerDeckValue(deck)
     //     document.getElementById("card").innerHTML = "Dealer Busted You WINNNNN!!!"
     //     stand()
     // }
-    if(value > 21){
-        if(aces > 0 && removed === false) {
-            console.log("Removed More 10")
-            removed = true;
-            value -= 10
-            dealerHand -=10
-            document.getElementById("playervalue").innerHTML = `Your Cards: ${dealerHand}`;
-        } else if(value > 21) {
-        document.getElementById("card").innerHTML = "Dealer Busted You WINNNNN!!!"
-        stand()
-    }
-
+    
 
 // console.log(deck)
 // console.log(shuffled_deck)
