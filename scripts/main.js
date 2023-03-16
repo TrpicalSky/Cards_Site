@@ -5,12 +5,34 @@ let dealerCards = new Array();
 let decision = false;
 let playerHand = 0;
 let dealerHand = 0;
-let busted = false;
+let playerBusted = false;
+let dealerBusted = false;
 const deck = getDeck()
 const shuffled_deck = shuffle(deck)
 // const card = dealCard(shuffled_deck)
 
 // REMINDER FIX ACES BREAKING VALUE AFTER ONE BEING ADDED AND THEN ANOTHER CARD BEING ADDED BREAKS VALUE (Half Fixed)
+
+
+function restartFunc() {
+    let newDeck = getDeck();
+    let newShuffledDeck = shuffle(newDeck);
+    cardsDealt = [];
+    dealerCards = [];
+    playerBusted = false;
+    dealerBusted = false;
+    playerHand = 0;
+    dealerHand = 0;
+    decision = false;
+    document.getElementById("deck").innerHTML = "";
+    document.getElementById("dealer").innerHTML = "";
+    document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
+    document.getElementById("dealervalue").innerHTML = `Your Cards: ${dealerHand}`;
+    let newCardButton = document.getElementById("restart");
+    let standButton = document.getElementById("stand");
+    newCardButton.disabled = false;
+    standButton.disabled = false;
+}
 
 
 function afterStand() {
@@ -21,7 +43,7 @@ function afterStand() {
         renderDealerCards(dealerCards)
         console.log(dealerCards);
     }
-    if (dealerHand > playerHand && busted !== true) {
+    if (dealerHand > playerHand && dealerBusted !== true) {
         document.getElementById("card").innerHTML = "Dealer has a Bigger hand. You LOSE!!!!!"
     } else if (dealerHand < playerHand) {
         document.getElementById("card").innerHTML = "Dealer has a smaller hand. You WINNNNN!!!"
@@ -198,7 +220,8 @@ function addDealerCards(deck)
 
 function playerDeckValue(deck)
 {
-    let removed = false;
+    if (!playerBusted) {
+        let removed = false;
     let aces = 0;
     let value = 0;
     for (let i = 0; i < cardsDealt.length; i++ ) {
@@ -252,8 +275,14 @@ function playerDeckValue(deck)
             playerHand -=10
             document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
         } else if(value > 21) {
+        const button = document.getElementById("newcard")
+        const standButton = document.getElementById("stand")
+        standButton.disabled = true;
+        button.disabled = true;
+        playerBusted = true;
         document.getElementById("card").innerHTML = "BUSTED!!!!!"
         stand()
+    }
     }
     
     
@@ -263,7 +292,8 @@ function playerDeckValue(deck)
 }
 function dealerDeckValue(deck)
 {
-    let removed = false;
+    if (!dealerBusted) {
+        let removed = false;
     let aces = 0;
     let value = 0;
     for (let i = 0; i < dealerCards.length; i++ ) {
@@ -307,6 +337,7 @@ function dealerDeckValue(deck)
                 document.getElementById("playervalue").innerHTML = `Your Cards: ${dealerHand}`;
             } else if(value > 21) {
             document.getElementById("card").innerHTML = "Dealer Busted You WINNNNN!!!"
+            document.getElementById("dealervalue").innerHTML = `Dealers Cards : ${dealerValue}`
             busted = true;
             // stand()
         }
@@ -327,5 +358,6 @@ function dealerDeckValue(deck)
 
 // console.log(deck)
 // console.log(shuffled_deck)
+    }
 }
 }
