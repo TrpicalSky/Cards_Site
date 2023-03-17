@@ -28,10 +28,12 @@ function restartFunc() {
     document.getElementById("dealer").innerHTML = "";
     document.getElementById("playervalue").innerHTML = `Your Cards: ${playerHand}`;
     document.getElementById("dealervalue").innerHTML = `Your Cards: ${dealerHand}`;
-    let newCardButton = document.getElementById("restart");
+    let newCardButton = document.getElementById("newcard");
+    document.getElementById("card").innerHTML = "";
     let standButton = document.getElementById("stand");
     newCardButton.disabled = false;
     standButton.disabled = false;
+
 }
 
 
