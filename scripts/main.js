@@ -62,6 +62,8 @@ function stand() {
 function Buttonstand() {
     if (cardsDealt.length >= 2){
         const button = document.getElementById("newcard")
+        const standButton = document.getElementById("stand");
+        standButton.disabled = true;
         button.disabled = true;
         decision = true;
         afterStand();
